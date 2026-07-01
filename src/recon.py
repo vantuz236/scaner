@@ -1,7 +1,11 @@
 from nmap import *
 import pprint
 def scan_target(target):
-    nm = PortScanner()
+    try:
+        nm = PortScanner()
+    except nmap.PortScannerError:
+        print("Ошибка. Не найден мудуль nmap. Перед началом работы установите Nmap с оффициального сайта https://nmap.org/download.html")
+        return 0
     ports = "22,80,443,8080"
     nm.scan(hosts=target, ports=ports, arguments="-sV")
     parsed_res = {}
