@@ -1,39 +1,31 @@
-from nmap import *
-import pprint
+import nmap
+
+
 def scan_target(target):
     try:
-        nm = PortScanner()
-    except nmap.PortScannerError:
-        print("Ошибка. Не найден мудуль nmap. Перед началом работы установите Nmap с оффициального сайта https://nmap.org/download.html")
-        return 0
-    ports = "22,80,443,8080"
-    nm.scan(hosts=target, ports=ports, arguments="-sV")
-    parsed_res = {}
+        nm = nmap.PortScanner()
+    except Exception:
+        print("-Критическая ошибка. Убедитесь, что в системе установлен Nmap в PATH")
+        return {}
+    try:
+        nm.scan(hosts=target, ports="22,80,443,8080", arguments="-sV -Pn --open")
+        parsed_res = {}
 
-    for host in nm.all_hosts():
-        parsed_res[host] = []
-
-        for proto in nm[host].all_protocols():
-            lport = nm[host][proto].keys()
-            for port in lport:
-                port_data = nm[host][proto][port]
-                if port_data["state"] == "open":
-                    product = port_data.get("product", "")
-                    version = port_data.get("version", "")
-                    service = port_data.get("name", "")
+        for host in nm.all_hosts():
+            parsed_res[host] = []
+            for proto in nm[host].all_protocols():
+                for port in nm[host][proto]:
+                    port_data = nm[host][proto][port]
                     service_info = {
                         "port": port,
                         "protocol": proto,
-                        "service": service,
-                        "product": product,
-                        "version": version
-
+                        "service": port_data.get("name", ""),
+                        "product": port_data.get("product", ""),
+                        "version": port_data.get("version", "")
                     }
                     parsed_res[host].append(service_info)
-    return parsed_res
+        if parsed_res and any(parsed_res.values()):
+            return parsed_res
 
-
-if __name__ == "__main__":
-    test_host = "scanme.nmap.org"
-    scan_data = scan_target(test_host)
-    pprint.pprint(scan_data)
+    except Exception:
+        pass
