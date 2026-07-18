@@ -27,5 +27,6 @@ def scan_target(target):
         if parsed_res and any(parsed_res.values()):
             return parsed_res
 
+
     except Exception:
         pass

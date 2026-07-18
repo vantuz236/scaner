@@ -17,7 +17,7 @@ def parse_version(version_str):
 
     try:
         fst = int(match.group(1))
-        # отсекаем случаи, когда за 1е число берется годgit add .
+        # отсекаем случаи, когда за 1е число берется год
         if fst > 1990 and fst < 2030:
             return (0, 0, 0)
 
