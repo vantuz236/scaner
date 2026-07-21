@@ -13,4 +13,5 @@
 Зависимости: в системе должен быть установлен обычный `nmap`.
 
 ```bash
-pip install python-nmap requests
+pip install -r requirements.txt
+nmap: https://nmap.org/download
