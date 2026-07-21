@@ -12,6 +12,9 @@
 ## Запуск:
 Зависимости: в системе должен быть установлен обычный `nmap`.
 
+
+nmap: https://nmap.org/download
+
 ```bash
 pip install -r requirements.txt
-nmap: https://nmap.org/download
+
